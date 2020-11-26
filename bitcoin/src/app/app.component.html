@@ -1,0 +1,105 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>Bitcoin Order</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div fxLayout="column" fxLayoutAlign="start stretch" class="card">
+  <div fxLayout="row" fxLayoutAlign="center">
+    <div fxFlex="90%" fxFlex.md="66.6667%" fxFlex.gt-md="50%">
+      <form [formGroup]="form" (ngSubmit)="confirmOrder()" #formDirective="ngForm">
+        <mat-divider></mat-divider>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>
+              <h2>Personal Particulars</h2>
+            </mat-card-title>            
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field>
+              <mat-label>Contact No.</mat-label>
+              <input matInput formControlName="contact" >
+            </mat-form-field>
+            <div>
+              <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" >
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-label>Gender: </mat-label>
+              <mat-radio-group arial-label="Select an option" formControlName="gender">
+                <mat-radio-button value="Male">Male &nbsp;</mat-radio-button>
+                <mat-radio-button value="Female">Female &nbsp;</mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Date of Birth: </mat-label>
+                <input matInput [matDatepicker]="dobPicker" formControlName="dob" [max]="minAge">
+                <mat-datepicker-toggle matSuffix [for]="dobPicker" ></mat-datepicker-toggle>
+                <mat-datepicker #dobPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+          <mat-card-header>
+            <mat-card-title>
+              <h2>Order Details</h2>
+            </mat-card-title>            
+          </mat-card-header>
+          <mat-card-content>
+            <div>
+              <mat-form-field>
+                <mat-label>Order Date: </mat-label>
+                <input matInput [matDatepicker]="orderDatePicker" formControlName="orderDate" [min]="today">
+                <mat-datepicker-toggle matSuffix [for]="orderDatePicker" ></mat-datepicker-toggle>
+                <mat-datepicker #orderDatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Order Type</mat-label>
+                <mat-select formControlName="orderType">
+                  <mat-option value="buy">Buy</mat-option>
+                  <mat-option value="sell">Sell</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field>
+                <mat-label>Order Unit</mat-label>
+                <input matInput formControlName="orderUnit" (change)="updateTotal()">
+              </mat-form-field>
+                <div *ngIf="form.get('orderUnit').errors && (form.get('orderUnit').dirty || form.get('orderUnit').touched)">
+                  <mat-error *ngIf="form.get('orderUnit').errors.pattern" class="text-danger">Numbers Only</mat-error>
+                </div>
+              
+            </div>
+            <div>
+              <mat-label><strong>Pair:</strong> SGD/BTC</mat-label>
+            </div>
+            <br>
+            <div>
+              <mat-label><strong>Price:</strong> SGD ${{price | number: '.2' }}</mat-label><br><br>
+            </div>
+            <div *ngIf="form.get('orderType').value=='sell'">
+            <mat-label><strong>PayNow QR Code:</strong><br>
+              <img src="../assets/paynow.png" width="200px" alt=""></mat-label>
+            </div>
+            <div *ngIf="form.get('orderType').value=='buy'">
+              <mat-label><strong>Bitcoin address:</strong><br>
+              1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2</mat-label>
+            </div>
+            <div>
+              <mat-label><strong>Total Cost: </strong>
+              SGD ${{total | number: '.2' }}</mat-label>
+            </div>
+            <br>
+            <button mat-raised-button color="primary" type="submit">Submit</button> &nbsp;<!-- [disabled]="form.invalid">Submit</button>-->
+            <button mat-raised-button color="primary" type="reset">Reset</button>
+          </mat-card-content>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</div>
